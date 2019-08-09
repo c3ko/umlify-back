@@ -3,24 +3,36 @@ package com.mimico.umldraw.UmlGen.parse;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class Parser {
 
 
-    public static List<ClassInfo> classParser(String src){
+    /**
+     *
+     * @param src java source code
+     * @return
+     */
+    public List<ClassInfo> parseClass(String src){
+        List<ClassInfo> classCollector = new ArrayList<>();
         CompilationUnit cu = JavaParser.parse(src);
-        List<ClassInfo> classCollector = new ArrayList<ClassInfo>();
         VoidVisitor<List<ClassInfo>> classV = new ClassPrinter();
         classV.visit(cu, classCollector);
-        return classCollector;
 
+        return classCollector;
     }
 
+    /**
+     * Static class used to visit contructor, method and member nodes in AST tree of Java source code
+     */
     private static class ClassPrinter extends VoidVisitorAdapter<List<ClassInfo>> {
         @Override
         public void visit(ClassOrInterfaceDeclaration cd, List<ClassInfo> collector){
@@ -28,6 +40,19 @@ public class Parser {
             List<MethodInfo> methodCollector = new ArrayList<MethodInfo>();
             List<MemberInfo> memberCollector = new ArrayList<MemberInfo>();
             List<MethodInfo> constructorCollector = new ArrayList<MethodInfo>();
+            List<String> implementedClasses = new ArrayList<>();
+            List<String> extendedClasses = new ArrayList<>();
+
+            for(ClassOrInterfaceType it: cd.getImplementedTypes()){
+                implementedClasses.add(it.asString());
+                System.out.println("Implemented Classes: " + it.asString());
+            }
+
+            for(ClassOrInterfaceType et: cd.getExtendedTypes()){
+                extendedClasses.add(et.asString());
+                System.out.println("Extended Classes: " + et.asString());
+
+            }
 
             //handle members/fields
             for (FieldDeclaration fd: cd.getFields()){
@@ -80,8 +105,7 @@ public class Parser {
                 mods.add(m.name());
             }
 
-            collector.add(new ClassInfo(cd.getNameAsString(),  mods, constructorCollector, methodCollector, memberCollector));
-            System.out.println("Class names: " + cd.getName());
+            collector.add(new ClassInfo(cd.getNameAsString(),  mods, implementedClasses, extendedClasses, constructorCollector, methodCollector, memberCollector));
 
         }
     }

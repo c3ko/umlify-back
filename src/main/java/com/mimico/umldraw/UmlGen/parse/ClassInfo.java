@@ -5,16 +5,42 @@ import java.util.List;
 public class ClassInfo {
     private  String className;
     private  List<String> modifiers;
+    private  List<String> implementedTypes;
+    private  List<String> extendedTypes;
     private  List<MethodInfo> constructors;
     private  List<MethodInfo> methods;
     private  List<MemberInfo> members;
 
+    /**
+     *
+     * @return list of types implemented by the class
+     */
 
+    public List<String> getImplementedTypes() {
+        return implementedTypes;
+    }
 
+    /**
+     *
+     * @param implementedTypes set the types implemented by the class
+     */
+    public void setImplementedTypes(List<String> implementedTypes) {
+        this.implementedTypes = implementedTypes;
+    }
 
-    ClassInfo(String className, List<String> modifiers, List<MethodInfo> constructors, List<MethodInfo> methods, List<MemberInfo> members) {
+    public List<String> getExtendedTypes() {
+        return extendedTypes;
+    }
+
+    public void setExtendedTypes(List<String> extendedTypes) {
+        this.extendedTypes = extendedTypes;
+    }
+
+    ClassInfo(String className, List<String> modifiers, List<String> implementedTypes, List<String> extendedTypes, List<MethodInfo> constructors, List<MethodInfo> methods, List<MemberInfo> members) {
         this.className = className;
         this.modifiers = modifiers;
+        this.implementedTypes = implementedTypes;
+        this.extendedTypes = extendedTypes;
         this.constructors = constructors;
         this.methods = methods;
         this.members = members;
