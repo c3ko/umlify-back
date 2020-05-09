@@ -7,7 +7,6 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,25 +22,54 @@ public class Parser {
      */
     public List<ClassInfo> parseClass(String src){
         List<ClassInfo> classCollector = new ArrayList<>();
+        List<EnumInfo> enumCollector = new ArrayList<>();
         CompilationUnit cu = JavaParser.parse(src);
         VoidVisitor<List<ClassInfo>> classV = new ClassPrinter();
+        VoidVisitor<List<EnumInfo>> enumV = new EnumPrinter();
         classV.visit(cu, classCollector);
+        enumV.visit(cu, enumCollector);
 
         return classCollector;
     }
 
+    public static class EnumPrinter extends VoidVisitorAdapter<List<EnumInfo>> {
+        List<EnumInfo> enumCollector = new ArrayList<>();
+        @Override
+        public void visit(EnumDeclaration ed, List<EnumInfo> collector) {
+            super.visit(ed, collector);
+            System.out.println("Enum Name:"  + ed.getNameAsString());
+
+            List<String> enumValueList = new ArrayList();
+            for (EnumConstantDeclaration en: ed.getEntries()){
+                System.out.println("Enum Value Name:"  + en.getNameAsString());
+                enumValueList.add(en.getNameAsString());
+            }
+            List<String> mods = new ArrayList<>();
+            for (Enum m: ed.getModifiers()){
+                mods.add(m.toString());
+            }
+            EnumInfo enumInfo = new EnumInfo(ed.getNameAsString(), mods, enumValueList);
+
+            enumCollector.add(enumInfo);
+
+        }
+    }
     /**
-     * Static class used to visit contructor, method and member nodes in AST tree of Java source code
+     * Static class used to visit constructor, method and member nodes in AST tree of Java source code
      */
-    private static class ClassPrinter extends VoidVisitorAdapter<List<ClassInfo>> {
+    public static class ClassPrinter extends VoidVisitorAdapter<List<ClassInfo>> {
+
+
         @Override
         public void visit(ClassOrInterfaceDeclaration cd, List<ClassInfo> collector){
             super.visit(cd, collector);
+
             List<MethodInfo> methodCollector = new ArrayList<MethodInfo>();
             List<MemberInfo> memberCollector = new ArrayList<MemberInfo>();
             List<MethodInfo> constructorCollector = new ArrayList<MethodInfo>();
             List<String> implementedClasses = new ArrayList<>();
             List<String> extendedClasses = new ArrayList<>();
+
 
             for(ClassOrInterfaceType it: cd.getImplementedTypes()){
                 implementedClasses.add(it.asString());
@@ -53,6 +81,7 @@ public class Parser {
                 System.out.println("Extended Classes: " + et.asString());
 
             }
+
 
             //handle members/fields
             for (FieldDeclaration fd: cd.getFields()){
@@ -99,11 +128,19 @@ public class Parser {
                 constructorCollector.add(new MethodInfo(c.getNameAsString(),mods, "void", params));
             }
 
+
             //Get modifiers for class
             List<String> mods = new ArrayList<String>();
+
+            if (cd.isInterface()){
+                mods.add("interface");
+            }
+
             for (Enum m: cd.getModifiers()){
                 mods.add(m.name());
             }
+
+
 
             collector.add(new ClassInfo(cd.getNameAsString(),  mods, implementedClasses, extendedClasses, constructorCollector, methodCollector, memberCollector));
 

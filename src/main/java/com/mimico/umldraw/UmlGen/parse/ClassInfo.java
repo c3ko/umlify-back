@@ -1,5 +1,6 @@
 package com.mimico.umldraw.UmlGen.parse;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ClassInfo {
@@ -44,6 +45,7 @@ public class ClassInfo {
         this.constructors = constructors;
         this.methods = methods;
         this.members = members;
+
     }
 
     public String getClassName() {

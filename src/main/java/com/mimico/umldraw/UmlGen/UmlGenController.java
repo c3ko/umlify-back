@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,20 +27,21 @@ public class UmlGenController {
 
     @CrossOrigin(origins = "*")
     @PostMapping("/parse")
-    public ResponseEntity<ClassInfo> retrieveUML(@RequestBody String src){
+    public ResponseEntity<List<ClassInfo>> retrieveUML(@RequestBody String src){
 
         System.out.println(src);
-        ClassInfo parsedClass = service.parseOneClass(src);
+        List<ClassInfo> parsedClass = service.parseOneClass(src);
 
         return ResponseEntity.ok(parsedClass);
     }
 
+
     @CrossOrigin(origins = "*")
     @PostMapping(value="/parsemultiple")
-    public ResponseEntity<List<ClassInfo>> retrieveMultipleUML(@RequestBody List<String> srcList){
+    public ResponseEntity<List<List<ClassInfo>>> retrieveMultipleUML(@RequestBody List<String> srcList){
 
         System.out.println(srcList);
-        List<ClassInfo> parsedClasses = new ArrayList<>();
+        List<List<ClassInfo>> parsedClasses = new ArrayList<>();
 
             for(String s: srcList){
                 try {
@@ -57,6 +59,41 @@ public class UmlGenController {
 
 
     }
+    @CrossOrigin("*")
+    @PostMapping(value="/svgs")
+    public ResponseEntity<String> retrieveUMLSVG(@RequestBody List<String> srcList) throws IOException {
+        List<List<ClassInfo>> parsedClasses = new ArrayList();
+        for(String s: srcList){
+            try {
+                String formattedSource = new Formatter().formatSource(s);
+                parsedClasses.add(service.parseOneClass(formattedSource));
 
+            } catch (FormatterException f){
+                f.printStackTrace();
+            }
+        }
+        String responseString = service.drawUMLSVG(parsedClasses);
+        return ResponseEntity.ok(responseString);
+    }
+
+    @CrossOrigin("*")
+    @PostMapping(value="/svg")
+    public ResponseEntity<String> retrieveUMLSVG(@RequestBody String src) throws IOException {
+        System.out.println(src);
+        List<List<ClassInfo>> parsedClasses = new ArrayList();
+        parsedClasses.add(service.parseOneClass(src));
+        String responseString = service.drawUMLSVG(parsedClasses);
+        return ResponseEntity.ok(responseString);
+    }
+
+    @CrossOrigin("*")
+    @PostMapping(value="/png", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> retrieveUMLPNG(@RequestBody String src) throws IOException {
+        System.out.println(src);
+        List<List<ClassInfo>> parsedClasses = new ArrayList();
+        parsedClasses.add(service.parseOneClass(src));
+        byte[] pngResponse = service.drawUMLPNG(parsedClasses);
+        return ResponseEntity.ok(pngResponse);
+    }
 
 }
