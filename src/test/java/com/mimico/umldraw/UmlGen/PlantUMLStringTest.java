@@ -23,14 +23,18 @@ public class PlantUMLStringTest {
     public List<String> m2 = Arrays.asList(modifierArray2);
     public List<String> m3 = Arrays.asList(modifierArray3);
 
-    @ParameterizedTest
+    @Test
     void testAccessModifierStrings(){
         assertEquals(PlantUMLStringBuilder.getAccessModifierString(m0), "+");
         assertEquals(PlantUMLStringBuilder.getAccessModifierString(m1), "+");
         assertEquals(PlantUMLStringBuilder.getAccessModifierString(m2), "-");
         assertEquals(PlantUMLStringBuilder.getAccessModifierString(m3), "#");
 
-
     }
 
+    @Test
+    void testStaticModifierStrings(){
+
+    }
+    
 }

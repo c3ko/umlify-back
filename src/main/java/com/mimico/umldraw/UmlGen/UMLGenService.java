@@ -53,7 +53,7 @@ public class UMLGenService {
     public String drawUMLSVG(List<List<ClassInfo>> classInfoList) throws IOException {
 
         String currentPlantUMLString = plantUMLStringBuilder.buildPlantUMLString(classInfoList);
-
+        System.out.println(currentPlantUMLString);
         SourceStringReader reader = new SourceStringReader(currentPlantUMLString);
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         DiagramDescription desc = reader.outputImage(outputStream, new FileFormatOption(FileFormat.SVG));

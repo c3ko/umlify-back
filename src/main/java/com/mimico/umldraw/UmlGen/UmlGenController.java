@@ -62,6 +62,8 @@ public class UmlGenController {
     @CrossOrigin("*")
     @PostMapping(value="/svgs")
     public ResponseEntity<String> retrieveUMLSVG(@RequestBody List<String> srcList) throws IOException {
+        System.out.println(srcList);
+
         List<List<ClassInfo>> parsedClasses = new ArrayList();
         for(String s: srcList){
             try {
