@@ -36,5 +36,5 @@ public class PlantUMLStringTest {
     void testStaticModifierStrings(){
 
     }
-    
+
 }
