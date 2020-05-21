@@ -37,11 +37,9 @@ public class Parser {
         @Override
         public void visit(EnumDeclaration ed, List<EnumInfo> collector) {
             super.visit(ed, collector);
-            System.out.println("Enum Name:"  + ed.getNameAsString());
 
             List<String> enumValueList = new ArrayList();
             for (EnumConstantDeclaration en: ed.getEntries()){
-                System.out.println("Enum Value Name:"  + en.getNameAsString());
                 enumValueList.add(en.getNameAsString());
             }
             List<String> mods = new ArrayList<>();
@@ -73,13 +71,10 @@ public class Parser {
 
             for(ClassOrInterfaceType it: cd.getImplementedTypes()){
                 implementedClasses.add(it.asString());
-                System.out.println("Implemented Classes: " + it.asString());
             }
 
             for(ClassOrInterfaceType et: cd.getExtendedTypes()){
                 extendedClasses.add(et.asString());
-                System.out.println("Extended Classes: " + et.asString());
-
             }
 
 

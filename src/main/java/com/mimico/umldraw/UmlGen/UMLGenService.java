@@ -31,23 +31,7 @@ public class UMLGenService {
 
         List<ClassInfo> parsedClass = parser.parseClass(src);
 
-        System.out.println(parsedClass.size());
-
-
         return parsedClass;
-
-
-
-    }
-
-    public List<ClassInfo> parseMultipleClasses(List<ClassSrc> srcList){
-
-        List<ClassInfo> parsedClasses = new ArrayList<>();
-        for(ClassSrc src: srcList){
-            parsedClasses.add(parser.parseClass(src.getSrc()).get(0));
-        }
-
-        return parsedClasses;
     }
 
     public String drawUMLSVG(List<List<ClassInfo>> classInfoList) throws IOException {

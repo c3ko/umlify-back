@@ -5,12 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-public class UmldrawApplication {
+public class UmlDrawApplication {
 
 	public static void main(String[] args) {
 
 
-		SpringApplication.run(UmldrawApplication.class, args);
+		SpringApplication.run(UmlDrawApplication.class, args);
 	}
 
 

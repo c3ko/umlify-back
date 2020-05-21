@@ -52,9 +52,7 @@ public class UmlGenController {
                     f.printStackTrace();
                 }
             }
-            /*
-            List<ClassInfo> parsedClasses = srcList.stream().map(s -> service.parseOneClass(new Formatter().formatSource(s))).collect(Collectors.toList());
-            */
+
             return ResponseEntity.ok(parsedClasses);
 
 

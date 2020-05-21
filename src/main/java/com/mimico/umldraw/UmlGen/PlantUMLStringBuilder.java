@@ -107,16 +107,15 @@ public class PlantUMLStringBuilder {
         }
 
         for (MethodInfo method: classToBuild.getConstructors()){
-            String currentMethodString = buildMethod(method, false);
+            String currentMethodString = buildMethod(method, true);
             classString.append(currentMethodString + NEW_LINE);
         }
 
         for (MethodInfo con: classToBuild.getMethods()) {
-            String currentConstructorString = buildMethod(con, true);
+
+            String currentConstructorString = buildMethod(con, false);
             classString.append(currentConstructorString + NEW_LINE);
         }
-
-        //getClassStringBuilders().put(classToBuild.getClassName(), )
         classString.append(END_BLOCK);
         return classString.toString();
     }
@@ -133,11 +132,16 @@ public class PlantUMLStringBuilder {
             if (isStatic(m.getModifiers())){
                 methodString.append(STATIC + " ");
             }
-            methodString.append(getAccessModifierString(m.getModifiers()) + " " + m.getReturnType() + " " + m.getMethodName() + "(");
+
+            if (m.getReturnType().equals("void")){
+                methodString.append(getAccessModifierString(m.getModifiers()) + " " + m.getMethodName() + "(");
+            } else {
+                methodString.append(getAccessModifierString(m.getModifiers()) +  " " + m.getReturnType() +  " " + m.getMethodName() + "(");
+            }
         }
 
         else {
-            methodString.append(m.getMethodName() + "(");
+            methodString.append(getAccessModifierString(m.getModifiers()) +  " " + m.getMethodName() + "(");
         }
         for (int i = 0; i < m.getParams().size(); i++){
             ParameterInfo param  = m.getParams().get(i);
