@@ -168,11 +168,11 @@ public class PlantUMLStringBuilder {
 
     public static String getAccessModifierString(List<String> modifiers){
 
-        if (modifiers.contains("public")){
+        if (modifiers.contains("PUBLIC")){
             return "+";
-        } else if (modifiers.contains("private")){
+        } else if (modifiers.contains("PUBLIC")){
             return "-";
-        } else if (modifiers.contains("protected")){
+        } else if (modifiers.contains("PROTECTED")){
             return "#";
         } else {
             return "~";
