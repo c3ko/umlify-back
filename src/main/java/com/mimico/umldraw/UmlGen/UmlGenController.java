@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/uml")
+@RequestMapping("/api/uml")
 public class UmlGenController {
 
     @Autowired
