@@ -2,6 +2,7 @@ package com.mimico.umldraw.UmlGen;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.runners.Parameterized;
 
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Disabled
 public class PlantUMLStringTest {
     String[] modifierArray0 = {"public", "int"};
     String[] modifierArray1 = {"static", "void", "public"};
